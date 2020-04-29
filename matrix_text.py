@@ -2,7 +2,7 @@
 
 def text_to_roll(text):
 	rollsize = 200
-	roll[5][rollsize]
+	roll = [[0]*rollsize]*5
 	for i in range(5):
 		for j in range(rollsize):
 			roll[i][j] = 0
