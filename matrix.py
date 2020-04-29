@@ -233,6 +233,7 @@ def displayText():
         for i in range(5):
             for j in range(10):
                 if roll[i][index+j] == 1:
+                    print('intext')
                     done = False
                     strip.setPixelColor(image[i][j], Color(int(blue), int(red), int(green)))
 	strip.show()

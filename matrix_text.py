@@ -11,13 +11,18 @@ def text_to_roll(text):
 	text.upper()
 	for i in range(len(text)):
 		charsize = getCharSize(text[i])
-		if (index + charsize) > (rollsize-10):
+		if (index + charsize) > (rollsize-12):
 			break
 
-		roll[0:5][index:index+charsize] = getChar(text[i])
+		character = getChar(text[i])
+		print character
+		for j in range(5):
+			for k in range(charsize):
+				roll[j][index + k] = character[j][k]
+		
 		index += charsize
 
-	return roll[0:5][0:index+10]
+	return roll[0:5][0:index+12]
 
 
 def getCharSize(c):
