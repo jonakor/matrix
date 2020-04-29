@@ -220,13 +220,14 @@ def pulseApp():
 
 def displayText():
     global strip, intext, textFlag
+    if not textFlag:
+	return
     roll = text.text_to_roll(inText)
     index = 0
     image = [[40,41,42,43,44,45,46,47,48,49],[30,31,32,33,34,35,36,37,38,39],[20,21,22,23,24,25,26,27,28,29],[10,11,12,13,14,15,16,17,18,19],[0,1,2,3,4,5,6,7,8,9]]
 
 
     while textFlag:
-	print('intext')
         done = True
         for i in range(strip.numPixels()):
             strip.setPixelColor(i, Color(int(red), int(green), int(blue)))
