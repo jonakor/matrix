@@ -15,7 +15,6 @@ def text_to_roll(text):
 			break
 
 		character = getChar(text[i])
-		print character
 		for j in range(5):
 			for k in range(charsize):
 				roll[j][index + k] = character[j][k]
