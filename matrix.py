@@ -42,6 +42,8 @@ pulseFlag = False
 randomizerFlag = False
 textFlag = False
 
+inText = 'HELLO!'
+
 # Define functions which animate LEDs in various ways.
 def initApp():
     global frequency, strip, brightness
@@ -115,6 +117,7 @@ def readBluetooth():
             pulseFlag = False
             sinusFlag = False
             randomizerFlag = False
+            textFlag = False
             red = int(data[data.find('R')+1:data.find('G')-1])
             green = int(data[data.find('G')+1:data.find('B')-1])
             blue = int(data[data.find('B')+1:])
@@ -133,17 +136,28 @@ def readBluetooth():
         elif (data[0] == '5'):
             pulseFlag = False
             sinusFlag = False
+            textFlag = False
             randomizerFlag = not randomizerFlag
 
         elif (data[0] == '6'):
             pulseFlag = False
             randomizerFlag = False
+            textFlag = False
             sinusFlag = not sinusFlag
 
         elif (data[0] == '7'):
             sinusFlag = False
             randomizerFlag = False
+            textFlag = False
             pulseFlag = not pulseFlag
+
+        elif (data[0] == '9'):
+            sinusFlag = False
+            randomizerFlag = False
+            pulseFlag = False
+            textFlag = !textFlag
+
+            inText = data[1:]
 
         time.sleep(SLEEP)
 

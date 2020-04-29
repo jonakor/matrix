@@ -14,10 +14,10 @@ def text_to_roll(text):
 		if (index + charsize) > (rollsize-10):
 			break
 
-		roll[0:4][index:index+charsize] = getChar(text[i])
+		roll[0:5][index:index+charsize] = getChar(text[i])
 		index += charsize
 
-	return roll[0:4][0:index+10]
+	return roll[0:5][0:index+10]
 
 
 def getCharSize(c):
