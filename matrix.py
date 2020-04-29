@@ -226,7 +226,6 @@ def displayText():
 
 
     while textFlag:
-	print('intext')
         done = True
         for i in range(strip.numPixels()):
             strip.setPixelColor(i, Color(int(red), int(green), int(blue)))
@@ -236,6 +235,8 @@ def displayText():
                     print('intext')
                     done = False
                     strip.setPixelColor(image[i][j], Color(int(blue), int(red), int(green)))
+
+    index += 1
 	strip.show()
 	time.sleep(0.5)
         if done:
