@@ -5,7 +5,7 @@ def text_to_roll(text):
 	roll = [[[0] for i in range(rollsize)] for j in range(5)]
 
 	index = 10
-	text.upper()
+	text = text.upper()
 	for i in range(len(text)):
 		charsize = getCharSize(text[i])
 		if (index + charsize) > (rollsize-12):
