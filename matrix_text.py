@@ -21,7 +21,7 @@ def text_to_roll(text):
 		
 		index += charsize
 
-	return roll[0:5][0:index+12]
+	return (roll[0:5][0:index+12])
 
 
 def getCharSize(c):
