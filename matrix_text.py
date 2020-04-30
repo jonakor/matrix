@@ -2,10 +2,7 @@
 
 def text_to_roll(text):
 	rollsize = 200
-	roll = [[0]*rollsize]*5
-	for i in range(5):
-		for j in range(rollsize):
-			roll[i][j] = 0
+	roll = [[[0] for i in range(rollsize)] for j in range(5)]
 
 	index = 10
 	text.upper()
@@ -16,15 +13,11 @@ def text_to_roll(text):
 
 		character = getChar(text[i])
 		for j in range(5):
-			for k in range(charsize):
-				roll[j][index + k] = character[j][k]
+			roll[j][index:index + charsize] = character[j][:]
 		
 		index += charsize
 
-	out = [[0]*(index+12)]*5
-	for i in range(5):
-		for j in range(index+12):
-			out[i][j] = roll[i][j]
+	out = roll[:][0:index + 12]
 
 	return out
 
