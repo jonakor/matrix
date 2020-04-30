@@ -29,6 +29,10 @@ red = 0
 green = 0
 blue = 255
 
+red2 = 255
+green2 = 0
+blue2 = 0
+
 # GLOBAL VARs
 brightness = LED_BRIGHTNESS
 strip = 0
@@ -100,7 +104,7 @@ def setupComm():
 
 
 def readBluetooth():
-    global red, green, blue, strip, sinusFlag, pulseFlag, randomizerFlag, textFlag, frequency, brightness, inText
+    global red, green, blue, red2, green2, blue2, strip, sinusFlag, pulseFlag, randomizerFlag, textFlag, frequency, brightness, inText
     while True:
         data = client_socket.recv(1024)
         search = "SE"
@@ -114,13 +118,9 @@ def readBluetooth():
         data = data[data.find('S')+1:data.find('E')]
         #print data
         if (data[0] == '1'):
-            pulseFlag = False
-            sinusFlag = False
-            randomizerFlag = False
-            textFlag = False
-            red = int(data[data.find('R')+1:data.find('G')-1])
-            green = int(data[data.find('G')+1:data.find('B')-1])
-            blue = int(data[data.find('B')+1:])
+            red2 = int(data[data.find('R')+1:data.find('G')-1])
+            green2 = int(data[data.find('G')+1:data.find('B')-1])
+            blue2 = int(data[data.find('B')+1:])
 
         elif (data[0] == '2'):
             red = int(data[data.find('R')+1:data.find('G')-1])
@@ -235,7 +235,7 @@ def displayText():
             for j in range(10):
                 if roll[i][index+j] == 1:
                     done = False
-                    strip.setPixelColor(image[i][j], Color(int(blue), int(red), int(green)))
+                    strip.setPixelColor(image[i][j], Color(int(red2), int(green2), int(blue2)))
 
         if done:
             index = 0
@@ -254,19 +254,19 @@ def randomizer():
     frame = [0,1,2,3,4,5,6,7,8,9,19,29,39,49,48,47,46,45,44,43,42,41,40,30,20,10]
 
     colorWipe(strip, Color(int(red), int(green), int(blue)))
-    strip.setPixelColor(25, Color(int(green), int(blue), int(red)))
+    strip.setPixelColor(25, Color(int(red2), int(green2), int(blue2)))
     strip.show()
     time.sleep(1)
 
     colorWipe(strip, Color(int(red), int(green), int(blue)))
-    strip.setPixelColor(15, Color(int(green), int(blue), int(red)))
-    strip.setPixelColor(35, Color(int(green), int(blue), int(red)))
+    strip.setPixelColor(15, Color(int(red2), int(green2), int(blue2)))
+    strip.setPixelColor(35, Color(int(red2), int(green2), int(blue2)))
     strip.show()
     time.sleep(1)
 
     colorWipe(strip, Color(int(red), int(green), int(blue)))
-    strip.setPixelColor(5, Color(int(green), int(blue), int(red)))
-    strip.setPixelColor(45, Color(int(green), int(blue), int(red)))
+    strip.setPixelColor(5, Color(int(red2), int(green2), int(blue2)))
+    strip.setPixelColor(45, Color(int(red2), int(green2), int(blue2)))
     strip.show()
     time.sleep(0.1)
 
@@ -312,8 +312,8 @@ def randomizer():
             if prev2 != player2:
                 prev2 = player2
 
-            strip.setPixelColor(frame[player1], Color(int(green), int(blue), int(red)))
-            strip.setPixelColor(frame[player2], Color(int(green), int(blue), int(red)))
+            strip.setPixelColor(frame[player1], Color(int(red2), int(green2), int(blue2)))
+            strip.setPixelColor(frame[player2], Color(int(red2), int(green2), int(blue2)))
             strip.setBrightness(int(brightness))
             strip.show()
 
@@ -324,8 +324,8 @@ def randomizer():
 
     for i in range(5):
         colorWipe(strip, Color(int(red), int(green), int(blue)))
-        strip.setPixelColor(frame[player1], Color(int(green), int(blue), int(red)))
-        strip.setPixelColor(frame[player2], Color(int(green), int(blue), int(red)))
+        strip.setPixelColor(frame[player1], Color(int(red2), int(green2), int(blue2)))
+        strip.setPixelColor(frame[player2], Color(int(red2), int(green2), int(blue2)))
         strip.show()
         time.sleep(0.5)
 
