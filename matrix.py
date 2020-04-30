@@ -237,11 +237,11 @@ def displayText():
                     done = False
                     strip.setPixelColor(image[i][j], Color(int(blue), int(red), int(green)))
 
+        if done:
+            index = 0
         index += 1
         strip.show()
         time.sleep(0.5)
-        if done:
-            index = 0
 
 
 
