@@ -17,8 +17,10 @@ def text_to_roll(text):
 		
 		index += charsize
 
-	out = roll[:][0:index + 12]
-
+	out = [[0 for i in range(index + 12)] for j in range(5)]
+	for i in range(5):
+		out[i] = roll[i][0:index + 12]
+		
 	return out
 
 
