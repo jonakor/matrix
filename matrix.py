@@ -241,7 +241,7 @@ def displayText():
             index = 0
         index += 1
         strip.show()
-        time.sleep(0.3)
+        time.sleep(0.5)
 
 
 
