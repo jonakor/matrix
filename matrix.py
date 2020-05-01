@@ -45,6 +45,7 @@ sinusFlag = False
 pulseFlag = False
 randomizerFlag = False
 textFlag = False
+textChanged = False
 
 inText = 'HELLO!'
 
@@ -104,7 +105,7 @@ def setupComm():
 
 
 def readBluetooth():
-    global red, green, blue, red2, green2, blue2, strip, sinusFlag, pulseFlag, randomizerFlag, textFlag, frequency, brightness, inText
+    global red, green, blue, red2, green2, blue2, strip, sinusFlag, pulseFlag, randomizerFlag, textFlag, textChanged, frequency, brightness, inText
     while True:
         data = client_socket.recv(1024)
         search = "SE"
@@ -158,6 +159,7 @@ def readBluetooth():
             textFlag = not textFlag
 
             inText = data[1:]
+            textChanged = True
 
         time.sleep(SLEEP)
 
@@ -218,15 +220,13 @@ def pulseApp():
         time.sleep(SLEEP)
 
 def displayText():
-    global strip, intext, textFlag
-    if not textFlag:
-	   return
-    roll = scrollText.text_to_roll(inText)
-    
+    global strip, intext, textFlag, textChanged
+    if textChanged:
+        image = [[40,41,42,43,44,45,46,47,48,49],[30,31,32,33,34,35,36,37,38,39],[20,21,22,23,24,25,26,27,28,29],[10,11,12,13,14,15,16,17,18,19],[0,1,2,3,4,5,6,7,8,9]]
+        roll = scrollText.text_to_roll(inText)
+        textChanged = False
+
     index = 1
-    image = [[40,41,42,43,44,45,46,47,48,49],[30,31,32,33,34,35,36,37,38,39],[20,21,22,23,24,25,26,27,28,29],[10,11,12,13,14,15,16,17,18,19],[0,1,2,3,4,5,6,7,8,9]]
-
-
     while textFlag:
         done = True
         for i in range(strip.numPixels()):
@@ -241,7 +241,7 @@ def displayText():
             index = 0
         index += 1
         strip.show()
-        time.sleep(0.5)
+        time.sleep(0.3)
 
 
 
