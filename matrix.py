@@ -164,7 +164,7 @@ def readBluetooth():
             inText = data[1:]
             textChanged = True
 
-        elif (data[0] == 'snake'):
+        elif (data[0:5] == 'snake'):
             sinusFlag = False
             randomizerFlag = False
             pulseFlag = False
@@ -188,7 +188,7 @@ def appHandler():
         sinusApp()
         pulseApp()
         randomizer()
-        scrollText()
+        scrollingText()
         snakeGame()
         if (not sinusFlag) and (not pulseFlag) and (not randomizerFlag) and (not textFlag) and (not snakeFlag):
             defaultApp()
@@ -244,6 +244,7 @@ def displayText(disptext):
     image = [[40,41,42,43,44,45,46,47,48,49],[30,31,32,33,34,35,36,37,38,39],[20,21,22,23,24,25,26,27,28,29],[10,11,12,13,14,15,16,17,18,19],[0,1,2,3,4,5,6,7,8,9]]
     roll = scrollText.text_to_roll(disptext)
 
+    index = 1
     while True:
         done = True
         for i in range(strip.numPixels()):
@@ -257,11 +258,11 @@ def displayText(disptext):
         index += 1
         strip.setBrightness(int(brightness))
         strip.show()
-        time.sleep(0.3)
+        time.sleep(0.2)
         if done:
             break
 
-def scrollText():
+def scrollingText():
     global strip, intext, textFlag, textChanged
     if textChanged:
         image = [[40,41,42,43,44,45,46,47,48,49],[30,31,32,33,34,35,36,37,38,39],[20,21,22,23,24,25,26,27,28,29],[10,11,12,13,14,15,16,17,18,19],[0,1,2,3,4,5,6,7,8,9]]
@@ -377,6 +378,8 @@ def randomizer():
 
 def snakeGame():
     global snakeFlag, strip
+    if not snakeFlag:
+	return
     miss = False
     snake = [24, 25]
 
@@ -402,13 +405,13 @@ def snakeGame():
                 move -= 10
         elif snakeDir == 'l':
             move = snake[0] - 1
-            if (move == 0) or (move == 10) or (move == 20) or (move == 30) or (move == 40):
+            if (move == -1) or (move == 9) or (move == 19) or (move == 29) or (move == 39):
                 move += 10
 
 
         if move == apple:
             snake.insert(0,move)
-            miss == False
+            miss = False
         else:
             index = len(snake)
             while index > 1:
