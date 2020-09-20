@@ -379,7 +379,7 @@ def randomizer():
 def snakeGame():
     global snakeFlag, strip
     if not snakeFlag:
-	return
+        return
     miss = False
     snake = [24, 25]
 
