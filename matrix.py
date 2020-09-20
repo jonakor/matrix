@@ -46,8 +46,11 @@ pulseFlag = False
 randomizerFlag = False
 textFlag = False
 textChanged = False
+snakeFlag = False
 
 inText = 'HELLO!'
+
+snakeDir = 'u'
 
 # Define functions which animate LEDs in various ways.
 def initApp():
@@ -105,7 +108,7 @@ def setupComm():
 
 
 def readBluetooth():
-    global red, green, blue, red2, green2, blue2, strip, sinusFlag, pulseFlag, randomizerFlag, textFlag, textChanged, frequency, brightness, inText
+    global red, green, blue, red2, green2, blue2, strip, sinusFlag, pulseFlag, randomizerFlag, textFlag, snakeFlag, textChanged, frequency, brightness, inText, snakeDir
     while True:
         data = client_socket.recv(1024)
         search = "SE"
@@ -161,6 +164,22 @@ def readBluetooth():
             inText = data[1:]
             textChanged = True
 
+        elif (data[0:5] == 'snake'):
+            sinusFlag = False
+            randomizerFlag = False
+            pulseFlag = False
+            textFlag = False
+            snakeFlag = not snakeFlag
+
+        elif (data[0] == 'u'):
+            snakeDir = 'u'
+        elif (data[0] == 'd'):
+            snakeDir = 'd'
+        elif (data[0] == 'r'):
+            snakeDir = 'r'
+        elif (data[0] == 'l'):
+            snakeDir = 'l'
+
         time.sleep(SLEEP)
 
 
@@ -169,8 +188,9 @@ def appHandler():
         sinusApp()
         pulseApp()
         randomizer()
-	displayText()
-        if (not sinusFlag) and (not pulseFlag) and (not randomizerFlag) and (not textFlag):
+        scrollingText()
+        snakeGame()
+        if (not sinusFlag) and (not pulseFlag) and (not randomizerFlag) and (not textFlag) and (not snakeFlag):
             defaultApp()
 
 
@@ -219,7 +239,30 @@ def pulseApp():
         strip.show()
         time.sleep(SLEEP)
 
-def displayText():
+def displayText(disptext):
+    global strip
+    image = [[40,41,42,43,44,45,46,47,48,49],[30,31,32,33,34,35,36,37,38,39],[20,21,22,23,24,25,26,27,28,29],[10,11,12,13,14,15,16,17,18,19],[0,1,2,3,4,5,6,7,8,9]]
+    roll = scrollText.text_to_roll(disptext)
+
+    index = 1
+    while True:
+        done = True
+        for i in range(strip.numPixels()):
+            strip.setPixelColor(i, Color(int(red), int(green), int(blue)))
+        for i in range(5):
+            for j in range(10):
+                if roll[i][index+j] == 1:
+                    done = False
+                    strip.setPixelColor(image[i][j], Color(int(red2), int(green2), int(blue2)))
+
+        index += 1
+        strip.setBrightness(int(brightness))
+        strip.show()
+        time.sleep(0.2)
+        if done:
+            break
+
+def scrollingText():
     global strip, intext, textFlag, textChanged
     if textChanged:
         image = [[40,41,42,43,44,45,46,47,48,49],[30,31,32,33,34,35,36,37,38,39],[20,21,22,23,24,25,26,27,28,29],[10,11,12,13,14,15,16,17,18,19],[0,1,2,3,4,5,6,7,8,9]]
@@ -240,9 +283,9 @@ def displayText():
         if done:
             index = 0
         index += 1
+        strip.setBrightness(int(brightness))
         strip.show()
         time.sleep(0.3)
-
 
 
 def randomizer():
@@ -333,6 +376,61 @@ def randomizer():
         strip.show()
         time.sleep(0.5)
 
+def snakeGame():
+    global snakeFlag, strip
+    if not snakeFlag:
+        return
+    miss = False
+    snake = [24, 25]
+
+    while snakeFlag:
+        while not miss:
+            miss = True
+            apple = random.randint(0, 49)
+            for i in range(len(snake)):
+                if apple == snake[i]:
+                    miss = False
+
+        if snakeDir == 'u':
+            move = snake[0] + 10
+            if move > 49:
+                move -= 50
+        elif snakeDir == 'd':
+            move = snake[0] - 10
+            if move < 0:
+                move += 50
+        elif snakeDir == 'r':
+            move = snake[0] + 1
+            if (move == 10) or (move == 20) or (move == 30) or (move == 40) or (move == 50):
+                move -= 10
+        elif snakeDir == 'l':
+            move = snake[0] - 1
+            if (move == -1) or (move == 9) or (move == 19) or (move == 29) or (move == 39):
+                move += 10
+
+
+        if move == apple:
+            snake.insert(0,move)
+            miss = False
+        else:
+            index = len(snake)
+            while index > 1:
+                index -= 1
+                snake[index] = snake[index - 1]
+            snake[0] = move
+
+        for i in range(len(snake) - 1):
+            if snake[0] == snake[i + 1]:
+                snakeFlag = False
+
+        colorWipe(strip, Color(0, 200, 0))
+        strip.setPixelColor(apple, Color(255,0,0))
+        for i in range(len(snake)):
+            strip.setPixelColor(snake[i], Color(0,0,255))
+        strip.setBrightness(int(brightness))
+        strip.show()
+        time.sleep(0.5)
+    displayText('GAME OVER');
 
 try:
     setupLED()

@@ -2,7 +2,7 @@
 
 def text_to_roll(text):
 	rollsize = 200
-	roll = [[[0] for i in range(rollsize)] for j in range(5)]
+	roll = [[0 for i in range(rollsize)] for j in range(5)]
 
 	index = 10
 	text = text.upper()
