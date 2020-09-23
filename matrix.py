@@ -50,7 +50,7 @@ snakeFlag = False
 
 inText = 'HELLO!'
 
-snakeDir = 'u'
+snakeDir = 1
 
 # Define functions which animate LEDs in various ways.
 def initApp():
@@ -103,15 +103,15 @@ def setupComm():
     server_socket.bind(("",port))
     server_socket.listen(1)
     client_socket,address = server_socket.accept()
-    print('Accepted connection from ',address)
-    print('Bluetooth Connected!')
+    print("Accepted connection from ",address)
+    print("Bluetooth Connected!")
 
 
 def readBluetooth():
     global red, green, blue, red2, green2, blue2, strip, sinusFlag, pulseFlag, randomizerFlag, textFlag, snakeFlag, textChanged, frequency, brightness, inText, snakeDir
     while True:
         data = client_socket.recv(1024)
-        search = "SE"
+        search = b'SE'
         flag = 0
         for i in range(2):
             if (data.find(search[i]) < 0):
@@ -119,66 +119,66 @@ def readBluetooth():
         if flag == 1:
             continue
 
-        data = data[data.find('S')+1:data.find('E')]
-        #print data
-        if (data[0] == '1'):
-            red2 = int(data[data.find('R')+1:data.find('G')-1])
-            green2 = int(data[data.find('G')+1:data.find('B')-1])
-            blue2 = int(data[data.find('B')+1:])
+        data = data[data.find(b'S')+1:data.find(b'E')]
+        if (data[0:1] == b'1'):
+            red2 = int(data[data.find(b'R')+1:data.find(b'G')-1])
+            green2 = int(data[data.find(b'G')+1:data.find(b'B')-1])
+            blue2 = int(data[data.find(b'B')+1:])
 
-        elif (data[0] == '2'):
-            red = int(data[data.find('R')+1:data.find('G')-1])
-            green = int(data[data.find('G')+1:data.find('B')-1])
-            blue = int(data[data.find('B')+1:])
-        elif (data[0] == '3'):
+        elif (data[0:1] == b'2'):
+            red = int(data[data.find(b'R')+1:data.find(b'G')-1])
+            green = int(data[data.find(b'G')+1:data.find(b'B')-1])
+            blue = int(data[data.find(b'B')+1:])
+        elif (data[0:1] == b'3'):
             brightness = int(255*float(data[1:])/100)
             strip.setBrightness(int(brightness))
 
-        elif (data[0] == '4'):
+        elif (data[0:1] == b'4'):
             frequency = float(data[1:])/1000.0
 
-        elif (data[0] == '5'):
+        elif (data[0:1] == b'5'):
             pulseFlag = False
             sinusFlag = False
             textFlag = False
             randomizerFlag = not randomizerFlag
 
-        elif (data[0] == '6'):
+        elif (data[0:1] == b'6'):
             pulseFlag = False
             randomizerFlag = False
             textFlag = False
             sinusFlag = not sinusFlag
 
-        elif (data[0] == '7'):
+        elif (data[0:1] == b'7'):
             sinusFlag = False
             randomizerFlag = False
             textFlag = False
             pulseFlag = not pulseFlag
 
-        elif (data[0] == '9'):
+        elif (data[0:1] == b'9'):
             sinusFlag = False
             randomizerFlag = False
             pulseFlag = False
             textFlag = not textFlag
 
-            inText = data[1:]
+            inText = data[1:].decode()
+            print(inText)
             textChanged = True
 
-        elif (data[0:5] == 'snake'):
+        elif (data[0:5] == b'snake'):
             sinusFlag = False
             randomizerFlag = False
             pulseFlag = False
             textFlag = False
             snakeFlag = not snakeFlag
 
-        elif (data[0] == 'u'):
-            snakeDir = 'u'
-        elif (data[0] == 'd'):
-            snakeDir = 'd'
-        elif (data[0] == 'r'):
-            snakeDir = 'r'
-        elif (data[0] == 'l'):
-            snakeDir = 'l'
+        elif (data[0:1] == b'u'):
+            snakeDir = 1
+        elif (data[0:1] == b'd'):
+            snakeDir = 2
+        elif (data[0:1] == b'r'):
+            snakeDir = 3
+        elif (data[0:1] == b'l'):
+            snakeDir = 4
 
         time.sleep(SLEEP)
 
@@ -391,19 +391,19 @@ def snakeGame():
                 if apple == snake[i]:
                     miss = False
 
-        if snakeDir == 'u':
+        if snakeDir == 1:
             move = snake[0] + 10
             if move > 49:
                 move -= 50
-        elif snakeDir == 'd':
+        elif snakeDir == 2:
             move = snake[0] - 10
             if move < 0:
                 move += 50
-        elif snakeDir == 'r':
+        elif snakeDir == 3:
             move = snake[0] + 1
             if (move == 10) or (move == 20) or (move == 30) or (move == 40) or (move == 50):
                 move -= 10
-        elif snakeDir == 'l':
+        elif snakeDir == 4:
             move = snake[0] - 1
             if (move == -1) or (move == 9) or (move == 19) or (move == 29) or (move == 39):
                 move += 10
