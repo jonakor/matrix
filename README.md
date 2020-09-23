@@ -10,4 +10,4 @@ WS2812 Library
 https://github.com/rpi-ws281x/rpi-ws281x-python/tree/master/library
 https://github.com/jgarff/rpi_ws281x
 
-https://blog.adafruit.com/2020/04/17/starting-with-raspberry-pi-bluetooth-python-python-bluetooth-raspberrypi-piday-raspberry_pi/
+bluetooth: https://scribles.net/setting-up-bluetooth-serial-port-profile-on-raspberry-pi/
